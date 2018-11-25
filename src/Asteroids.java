@@ -20,8 +20,9 @@ public class Asteroids extends Applet implements KeyListener, ActionListener{
     Spacecraft ship;
     Timer timer; 
     ArrayList<Asteroid> asteroidList;
+    ArrayList<Bullet> bulletList;
     
-    boolean upKey, leftKey, rightKey;
+    boolean upKey, leftKey, rightKey, spaceKey;
     
     /**
      * Initialization method that will be called after the applet is loaded into
@@ -39,6 +40,7 @@ public class Asteroids extends Applet implements KeyListener, ActionListener{
         for (int i = 0; i < 6; i++){
             asteroidList.add(new Asteroid()); 
         }
+        bulletList = new ArrayList();
     }
     
     public void start(){
@@ -56,6 +58,12 @@ public class Asteroids extends Applet implements KeyListener, ActionListener{
         for (int i = 0; i < asteroidList.size(); i++){
             asteroidList.get(i).updatePosition();
         }
+        for (int i = 0; i < bulletList.size(); i++){
+            bulletList.get(i).updatePosition();
+            if (bulletList.get(i).counter == 85){
+                bulletList.remove(i);  
+            }
+        }
         checkCollision();
         
     }
@@ -69,6 +77,9 @@ public class Asteroids extends Applet implements KeyListener, ActionListener{
         }
         for (int i = 0; i < asteroidList.size(); i++){
             asteroidList.get(i).paint(offg);
+        }
+        for (int i = 0; i < bulletList.size(); i++){
+            bulletList.get(i).paint(offg);
         }
         g.drawImage(offscreen, 0, 0, this);
 
@@ -133,6 +144,7 @@ public class Asteroids extends Applet implements KeyListener, ActionListener{
     }
     
     public void keyPressed(KeyEvent e){
+        //MOVEMENT
         if (e.getKeyCode() == KeyEvent.VK_RIGHT){
             rightKey = true; 
         }
@@ -142,6 +154,12 @@ public class Asteroids extends Applet implements KeyListener, ActionListener{
         if (e.getKeyCode() == KeyEvent.VK_UP) {
             upKey = true; 
         }
+        
+        //FIRING
+        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+            spaceKey = true; 
+        }
+      
     }
     
     public void keyReleased(KeyEvent e){
@@ -153,6 +171,9 @@ public class Asteroids extends Applet implements KeyListener, ActionListener{
         }
         if(e.getKeyCode() == KeyEvent.VK_UP){
             upKey = false;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_SPACE){
+            spaceKey = false; 
         }
     }
     
@@ -167,6 +188,9 @@ public class Asteroids extends Applet implements KeyListener, ActionListener{
             ship.rotateRight();
         }
         
+        if (spaceKey){
+            bulletList.add(new Bullet(ship.xposition, ship.yposition, ship.angle));
+        }
     }
     
     public void keyTyped(KeyEvent e){

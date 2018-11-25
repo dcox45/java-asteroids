@@ -13,7 +13,7 @@ import java.awt.Polygon;
 
 public class Bullet extends VectorSprite{
     
-    public Bullet(){
+    public Bullet(double x, double y, double a){
         shape = new Polygon();
         shape.addPoint(0,0);
         shape.addPoint(0,0);
@@ -25,6 +25,15 @@ public class Bullet extends VectorSprite{
         drawShape.addPoint(0,0);
         drawShape.addPoint(0,0);
         drawShape.addPoint(0,0);
+        
+        xposition = x;
+        yposition = y;
+        angle = a;
+        THRUST = 10;
+        
+        xspeed = Math.cos(angle) * THRUST;
+        yspeed = Math.sin(angle) * THRUST;
+        
 
 
     }
